@@ -8,4 +8,6 @@ c++ 3D engine, made with SDL, supports:
   
 compile with `g++ main.cpp -lSDL2 -lSDL2_image --std=c++17` and run with `./a.out`
 
+you must have SDL installed
+
 
