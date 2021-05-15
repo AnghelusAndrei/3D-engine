@@ -5,7 +5,8 @@ c++ 3D engine, made with SDL, supports:
   -basic lighting, 
   -cameras, 
   -mesh rotation, 
-  -translation
+  -translation,
+  -scaling,
   -clipping,
   -depth buffer
   
