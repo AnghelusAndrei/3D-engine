@@ -1,4 +1,4 @@
-# Software Renderer
+# 3D Software Renderer
 c++ software renderer, made with SDL, supports:
 ```  -basic mesh rendering, 
   -loading .obj files,   
