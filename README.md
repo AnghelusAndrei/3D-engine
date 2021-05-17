@@ -1,4 +1,4 @@
-# 3D-engine
+# Software Renderer
 c++ software renderer, made with SDL, supports:
 ```  -basic mesh rendering, 
   -loading .obj files,   
