@@ -1,6 +1,6 @@
 # 3D-engine
 c++ software renderer, made with SDL, supports:
-  -basic mesh rendering, 
+```  -basic mesh rendering, 
   -loading .obj files,   
   -basic lighting, 
   -cameras, 
@@ -8,7 +8,7 @@ c++ software renderer, made with SDL, supports:
   -translation,
   -scaling,
   -clipping,
-  -depth buffer
+  -depth buffer```
   
 compile with `make engine` and run with `make run`
 
