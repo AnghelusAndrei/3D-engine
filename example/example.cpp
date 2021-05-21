@@ -29,7 +29,7 @@ int main()
     float *pDepthBuffer = new float[SCREEN_WIDTH * SCREEN_HEIGHT];
 
     mesh Cube;
-    Cube.LoadFile("./import/sphere.obj");
+    Cube.LoadFile("./import/sphere.obj", false);
 
     player_t Camera = {0,0,0,0,0};
 
