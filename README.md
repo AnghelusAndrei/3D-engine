@@ -9,10 +9,10 @@ c++ software renderer, made with SDL, supports:
   -scaling,
   -clipping,
   -depth buffer
-  -textures
+  -perspective correct textures
 ```
   
-compile with `make engine` and run with `make run`
+compile examples with `make engine` and run with `make run`
 
 you can download SDL2 [here](https://www.libsdl.org/download-2.0.php "SDL version 2.0.14 (stable) - Simple DirectMedia Layer")
 
