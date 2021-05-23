@@ -9,6 +9,7 @@ c++ software renderer, made with SDL, supports:
   -scaling,
   -clipping,
   -depth buffer
+  -textures
 ```
   
 compile with `make engine` and run with `make run`
