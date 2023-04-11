@@ -42,7 +42,7 @@ struct mesh
 	vec3 position;
 	vec3 size;
 	vec3 rotation;
-	SDL_Surface* texture = NULL;
+	SDL_Texture* texture = NULL;
 	color color = {255, 255, 255};
 
 	bool LoadFile(std::string sFilename, bool bHasTexture = false)
@@ -123,7 +123,7 @@ struct mesh
 };
 
 
-int LZ(int x){
+Uint8 LZ(int x){
 	int z = x;
 	if(z < 0){
 		z = 0;
@@ -520,6 +520,7 @@ mat4x4 Matrix_QuickInverse(mat4x4 &m)
 	return matrix;
 }
 
+#if !SDL_VERSION_ATLEAST(2,0,17)
 
 Uint32 getpixel(SDL_Surface *surface, int x, int y)
 {
@@ -730,11 +731,11 @@ void FillTriangle(	int x1, int y1, float u1, float v1, int x2, int y2, float u2,
 	}		
 }
 
+#endif
+
 
 void Frame(SDL_Renderer *renderer, std::vector<mesh> mesh_collection, mat4x4 Projection_Matrix, player_t Camera, float *pDepthBuffer, vec3 light, int SCREEN_WIDTH, int SCREEN_HEIGHT){
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
 
     std::fill_n(pDepthBuffer, SCREEN_HEIGHT*SCREEN_WIDTH, 0.0f);
 
@@ -925,15 +926,34 @@ void Frame(SDL_Renderer *renderer, std::vector<mesh> mesh_collection, mat4x4 Pro
 
                     for (std::list<triangle>::iterator t = listTriangles.begin(); t != listTriangles.end(); t++)
                     {
+#if !SDL_VERSION_ATLEAST(2,0,17)
 						if(!Mesh.texture){
 							SDL_SetRenderDrawColor(renderer, LZ(t->c.r + Mesh.color.r - 255), LZ(t->c.g + Mesh.color.g - 255), LZ(t->c.b + Mesh.color.b - 255), 255);
 						}
                         FillTriangle(t->p[0].x, t->p[0].y, t->t[0].x, t->t[0].y, t->p[1].x, t->p[1].y, t->t[1].x, t->t[1].y, t->p[2].x, t->p[2].y, t->t[2].x, t->t[2].y, t->t[0].z, t->t[1].z, t->t[2].z, renderer, Mesh.texture, (color){LZ(t->c.r + Mesh.color.r - 255), LZ(t->c.g + Mesh.color.g - 255), LZ(t->c.b + Mesh.color.b - 255)}, pDepthBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
+#else
+						if(!Mesh.texture){
+                            const std::vector< SDL_Vertex > verts =
+                            {
+                                { SDL_FPoint{ t->p[0].x, t->p[0].y }, SDL_Color{ LZ(t->c.r + Mesh.color.r - 255), LZ(t->c.g + Mesh.color.g - 255), LZ(t->c.b + Mesh.color.b - 255), 255 }, SDL_FPoint{ 0 }, },
+                                { SDL_FPoint{ t->p[1].x, t->p[1].y }, SDL_Color{ LZ(t->c.r + Mesh.color.r - 255), LZ(t->c.g + Mesh.color.g - 255), LZ(t->c.b + Mesh.color.b - 255), 255 }, SDL_FPoint{ 0 }, },
+                                { SDL_FPoint{ t->p[2].x, t->p[2].y }, SDL_Color{ LZ(t->c.r + Mesh.color.r - 255), LZ(t->c.g + Mesh.color.g - 255), LZ(t->c.b + Mesh.color.b - 255), 255 }, SDL_FPoint{ 0 }, },
+                            };
+							SDL_RenderGeometry( renderer, nullptr, verts.data(), verts.size(), nullptr, 0 );
+						}else{
+                            const std::vector< SDL_Vertex > verts =
+                            {
+                                { SDL_FPoint{ t->p[0].x, t->p[0].y }, SDL_Color{ 255, 255, 255, 255 }, SDL_FPoint{ t->t[0].x, t->t[0].y }, },
+                                { SDL_FPoint{ t->p[1].x, t->p[1].y }, SDL_Color{ 255, 255, 255, 255 }, SDL_FPoint{ t->t[1].x, t->t[1].y }, },
+                                { SDL_FPoint{ t->p[2].x, t->p[2].y }, SDL_Color{ 255, 255, 255, 255 }, SDL_FPoint{ t->t[2].x, t->t[2].y }, },
+                            };
+							SDL_RenderGeometry( renderer, Mesh.texture, verts.data(), verts.size(), nullptr, 0 );
+                        }
+#endif
+
                     }
                 }
             }
         }
     }
-
-    SDL_RenderPresent(renderer);
 }
